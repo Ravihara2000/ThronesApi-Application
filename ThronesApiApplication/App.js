@@ -1,17 +1,8 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import Router from "./Router"; // Correct import path
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+const App = () => {
+  return <Router />;
+};
 
-const styles = StyleSheet.create({
-  container: {
-
-  },
-});
+export default App;
