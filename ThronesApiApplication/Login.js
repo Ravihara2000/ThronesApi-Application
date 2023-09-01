@@ -2,19 +2,34 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the FontAwesome icon
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { useNavigation, useIsFocused } from "@react-navigation/native"; // Add import for useIsFocused
+import { StatusBar } from "expo-status-bar";
+import { auth } from './firebase';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const navigation = useNavigation(); // Get the navigation object
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleLogin = () => {
-    if (username === 'user' && password === 'password') {
-      alert('Login successful!');
-    } else {
-      alert('Login failed. Please check your credentials.');
+  const handleLogin = async () => {
+    try {
+      if (email && password) {
+        // Sign in with Firebase using email and password
+        await auth.signInWithEmailAndPassword(email, password);
+        // If successful, navigate to the desired screen (e.g., Home)
+        navigation.navigate('Home');
+      } else {
+        // Handle empty email or password fields
+        alert('Please enter both email and password.');
+      }
+    } catch (error) {
+      // Handle Firebase authentication errors
+      alert('Authentication failed. Please check your credentials.');
+      console.error(error);
     }
   };
+  
+
 
   return (
     <View style={styles.container}>
@@ -22,8 +37,8 @@ const Login = () => {
       <TextInput
         placeholder="Email"
         placeholderTextColor="white" 
-        value={username}
-        onChangeText={text => setUsername(text)}
+        value={email}
+        onChangeText={text => setEmail(text)}
         style={[styles.input, { color: 'white' }]}
       />
       <View style={styles.passwordInput}>
